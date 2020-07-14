@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Setter
 @Getter
 @Entity
-@Table(name = "ZAHLUNGSMITTEL" )
+@Table(name = "ZAHLUNGSMITTEL")
 public class Zahlungsmittel extends AbstractPersistable<Long> {
 
   @Column(length = 255)

@@ -20,4 +20,8 @@ public class Produktmerkmal extends AbstractPersistable<Long> {
   @ManyToOne
   @JoinColumn(name = "PRODUKT_ID")
   private Produkt produkt;
+
+  @ManyToOne
+  @JoinColumn(name = "PRODUKTVORLAGEMERKMAL_ID")
+  private Produktvorlagemerkmal produktvorlagemerkmal;
 }

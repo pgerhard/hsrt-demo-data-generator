@@ -2,8 +2,8 @@ package de.university.reutlingen.datenbank_praktikum.demo_data_generator.model;
 
 public enum ZahlungsmittelArten {
 
-  RECHNUNG ("Rechnung"),
-  TRANSFER ("Überweisung"),
+  RECHNUNG("Rechnung"),
+  TRANSFER("Überweisung"),
   PAYPAL("Paypal"),
   CREDIT_CARD("Kreditkarte"),
   SEPA("SEPA-Lastschrift");

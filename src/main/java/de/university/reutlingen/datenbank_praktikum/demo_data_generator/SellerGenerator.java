@@ -10,19 +10,21 @@ import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Ve
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Zahlungsmittel;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelArtAttribut;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelAttribut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class SellerGenerator {
 
+  @Autowired
+  private Faker faker;
+
   public SellerData generateSellerData(List<Kaeufer> buyers,
                                        List<ZahlungsmittelArt> paymentMethodTypes,
-                                       List<ZahlungsmittelArtAttribut> paymentMethodTypeAttribute){
-    Faker faker = new Faker(Locale.GERMANY);
+                                       List<ZahlungsmittelArtAttribut> paymentMethodTypeAttribute) {
 
 //    DemoAddressService.getRandomNumberInRange()
     List<String> usedEmails = new ArrayList<>();
@@ -37,7 +39,7 @@ public class SellerGenerator {
       do {
         final int buyerIndex = DemoAddressService.getRandomNumberInRange(0, buyers.size() - 1);
         buyer = buyers.get(buyerIndex);
-      } while(usedEmails.contains(buyer.getEmail()));
+      } while (usedEmails.contains(buyer.getEmail()));
       usedEmails.add(buyer.getEmail());
 
       final Adresse adresse = new Adresse();

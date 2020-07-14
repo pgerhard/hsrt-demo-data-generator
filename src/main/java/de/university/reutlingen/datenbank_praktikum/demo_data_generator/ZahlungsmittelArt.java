@@ -14,10 +14,13 @@ import javax.persistence.Table;
 @Table(name = "ZAHLUNGSMITTELART")
 public class ZahlungsmittelArt extends AbstractPersistable<Long> {
 
+  @Column(length = 255)
+  private String name;
+
   public enum ZahlungsmittelArten {
 
-    RECHNUNG ("Rechnung"),
-    TRANSFER ("Überweisung"),
+    RECHNUNG("Rechnung"),
+    TRANSFER("Überweisung"),
     PAYPAL("Paypal"),
     CREDIT_CARD("Kreditkarte"),
     SEPA("SEPA-Lastschrift");
@@ -32,8 +35,5 @@ public class ZahlungsmittelArt extends AbstractPersistable<Long> {
       return representation;
     }
   }
-
-  @Column(length = 255)
-  private String name;
 
 }

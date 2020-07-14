@@ -16,6 +16,20 @@ import javax.persistence.Table;
 @Table(name = "ADRESSE")
 public class Adresse extends AbstractPersistable<Long> {
 
+  private String vorname;
+  private String nachname;
+  private String strasse;
+  private Integer hausnummer;
+  private String adresszusatz;
+  private String plz;
+  private String stadt;
+  private String bundesland;
+  private String land;
+  @Enumerated(EnumType.STRING)
+  private Art art;
+  @ManyToOne
+  private Kaeufer kaeufer;
+
   public enum Art {
     LIEFERADRESSE,
     RECHNUNGSADRESSE;
@@ -28,37 +42,13 @@ public class Adresse extends AbstractPersistable<Long> {
 
     private String representation;
 
-    public String getRepresentation() {
-      return representation;
-    }
-
     Zusatz(String representation) {
       this.representation = representation;
     }
+
+    public String getRepresentation() {
+      return representation;
+    }
   }
-
-  private String vorname;
-
-  private String nachname;
-
-  private String strasse;
-
-  private Integer hausnummer;
-
-  private String adresszusatz;
-
-  private String plz;
-
-  private String stadt;
-
-  private String bundesland;
-
-  private String land;
-
-  @Enumerated(EnumType.STRING)
-  private Art art;
-
-  @ManyToOne
-  private Kaeufer kaeufer;
 
 }

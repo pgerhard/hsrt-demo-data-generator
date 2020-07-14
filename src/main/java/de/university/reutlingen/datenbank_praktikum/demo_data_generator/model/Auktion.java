@@ -8,8 +8,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -19,6 +17,35 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "AUKTION")
 public class Auktion extends AbstractPersistable<Long> {
+
+  @Column(name = "STARTZEITPUNKT")
+  private Date startZeitPunkt;
+  @Column(name = "ENDZEITPUNKT")
+  private Date endZeitPunkt;
+  private Boolean aktiviert;
+  private BigDecimal startpreis;
+  @Column(length = 3)
+  private String waehrung;
+  private BigDecimal mindestpreis;
+  @Column(name = "SOFORTKAUFPREIS")
+  private BigDecimal sofortKaufPreis;
+  private String art;
+  @Column(name = "VERSANDART")
+  private String versandArt;
+  @Column(name = "VERSANDKOSTEN")
+  private BigDecimal versandKosten;
+  @ManyToOne
+  @JoinColumn(name = "ANBIETER_ID")
+  private Verkaeufer anbieter;
+  @ManyToOne
+  @JoinColumn(name = "EXEMPLAR_ID")
+  private Exemplar exemplar;
+  @ManyToOne
+  @JoinColumn(name = "KAEUFER_ID")
+  private Kaeufer kaeufer;
+  @ManyToOne
+  @JoinColumn(name = "PRODUKT_ID")
+  private Produkt produkt;
 
   public enum Art {
     AUKTION("Auktion"),
@@ -51,48 +78,4 @@ public class Auktion extends AbstractPersistable<Long> {
       return representation;
     }
   }
-
-  @Column(name = "STARTZEITPUNKT")
-  private Date startZeitPunkt;
-
-  @Column(name = "ENDZEITPUNKT")
-  private Date endZeitPunkt;
-
-  private Boolean aktiviert;
-
-  private BigDecimal startpreis;
-
-  @Column(length = 3)
-  private String waehrung;
-
-  private BigDecimal mindestpreis;
-
-  @Column(name = "SOFORTKAUFPREIS")
-  private BigDecimal sofortKaufPreis;
-
-  @Enumerated(EnumType.STRING)
-  private Art art;
-
-  @Column(name = "VERSANDART")
-  @Enumerated(EnumType.STRING)
-  private VersandArt versandArt;
-
-  @Column(name = "VERSANDKOSTEN")
-  private BigDecimal versandKosten;
-
-  @ManyToOne
-  @JoinColumn(name = "ANBIETER_ID")
-  private Verkaeufer anbieter;
-
-  @ManyToOne
-  @JoinColumn(name = "EXEMPLAR_ID")
-  private Exemplar exemplar;
-
-  @ManyToOne
-  @JoinColumn(name = "KAEUFER_ID")
-  private Kaeufer kaeufer;
-
-  @ManyToOne
-  @JoinColumn(name = "PRODUKT_ID")
-  private Produkt produkt;
 }

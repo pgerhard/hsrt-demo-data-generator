@@ -1,5 +1,7 @@
 package de.university.reutlingen.datenbank_praktikum.demo_data_generator;
 
+import static de.university.reutlingen.datenbank_praktikum.demo_data_generator.DemoDataGeneratorApplication.REFERENCE_DATE;
+
 import com.github.javafaker.Faker;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Kaeufer;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Zahlungsmittel;
@@ -7,14 +9,13 @@ import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Za
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelArten;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelAttribut;
 import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,15 +32,37 @@ public class PaymentMethodGenerator {
   public static final String GEBURTSDATUM = "Geburtsdatum";
   public static final String E_MAIL = "E-Mail";
 
+  @Autowired
+  private Faker faker;
+
+  public static ZahlungsmittelArt getPaymentMethodType(ZahlungsmittelArt.ZahlungsmittelArten type,
+                                                       List<ZahlungsmittelArt> types) {
+    return types
+            .stream()
+            .filter(zahlungsmittelArt -> zahlungsmittelArt.getName().equals(type.getRepresentation()))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Didnt find an entity for the type"));
+  }
+
+  public static ZahlungsmittelArtAttribut getPaymentMethodTypeAttribute(String name,
+                                                                        List<ZahlungsmittelArtAttribut> attributs) {
+    return attributs
+            .stream()
+            .filter(attribut -> attribut.getName().equals(name))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Didn't find an entity for the attribute"));
+  }
+
   /**
    * Rechnung - D.o.B, Vorname, Nachname
    * Überweisung - None
    * Paypal - E-Mail
    * Kreditkarte - Card holder name, Card number, Expiration Date
    * SEPA-Lastschrift - BIC, IBAN, Bank Name
+   *
    * @return
    */
-  public List<ZahlungsmittelArtAttribut> generatPaymentTypeAttributes (List<ZahlungsmittelArt> paymentTypes) {
+  public List<ZahlungsmittelArtAttribut> generatPaymentTypeAttributes(List<ZahlungsmittelArt> paymentTypes) {
 
     List<ZahlungsmittelArtAttribut> attributs = new ArrayList<>();
 
@@ -106,17 +129,16 @@ public class PaymentMethodGenerator {
     return attributs;
   }
 
-  public UserPaymentInformation generatePaymentMethods (List<Kaeufer> kaeuferList,
-                                                        List<ZahlungsmittelArt> paymentMethodTypes,
-                                                        List<ZahlungsmittelArtAttribut> paymentMethodTypeAttribute) {
-    Faker faker = new Faker(Locale.GERMANY);
+  public UserPaymentInformation generatePaymentMethods(List<Kaeufer> kaeuferList,
+                                                       List<ZahlungsmittelArt> paymentMethodTypes,
+                                                       List<ZahlungsmittelArtAttribut> paymentMethodTypeAttribute) {
 
     final UserPaymentInformation userPaymentInformation = new UserPaymentInformation();
 
     final List<Zahlungsmittel> zahlungsmittels = new ArrayList<>();
     final List<ZahlungsmittelAttribut> zahlungsmittelAttribute = new ArrayList<>();
 
-    for (Kaeufer kaeufer: kaeuferList) {
+    for (Kaeufer kaeufer : kaeuferList) {
       final int numberOfPaymentMethods = DemoAddressService.getRandomNumberInRange(1, 5);
       for (int i = 0; i < numberOfPaymentMethods; i++) {
         final int numberOfPaymentMethodType = DemoAddressService.getRandomNumberInRange(0, 4);
@@ -126,7 +148,7 @@ public class PaymentMethodGenerator {
         zahlungsmittel.setKaufer(kaeufer);
 
         String paymentMethodName;
-        switch (paymentMethodType){
+        switch (paymentMethodType) {
           case SEPA:
             paymentMethodName = String.format("Sepa %s %s", kaeufer.getVorname(), kaeufer.getNachname());
             zahlungsmittel.setName(paymentMethodName);
@@ -186,8 +208,8 @@ public class PaymentMethodGenerator {
 
             final ZahlungsmittelAttribut expirationDate = new ZahlungsmittelAttribut();
             expirationDate.setWert(faker.date().between(
-                    DateUtils.addYears(new Date(), 1),
-                    DateUtils.addYears(new Date(), 4)
+                    DateUtils.addYears(REFERENCE_DATE, 1),
+                    DateUtils.addYears(REFERENCE_DATE, 4)
             ).toString());
             expirationDate.setZahlungsmittel(zahlungsmittel);
             expirationDate.setZahlungsmittelArtAttribute(getPaymentMethodTypeAttribute(ABLAUFDATUM, paymentMethodTypeAttribute));
@@ -231,44 +253,26 @@ public class PaymentMethodGenerator {
             .collect(Collectors.toList());
   }
 
-  public class UserPaymentInformation{
-    public List<Zahlungsmittel> zahlungsmittels;
-    public List<ZahlungsmittelAttribut> zahlungsmittelAttributs;
-
-  }
-
   private void addToType(ZahlungsmittelArtAttribut attribut, ZahlungsmittelArt.ZahlungsmittelArten type,
                          List<ZahlungsmittelArt> paymentTypes) {
     paymentTypes
             .stream()
             .filter(paymentType -> paymentType.getName().equals(type.getRepresentation()))
             .forEach(paymentType -> {
-              if (CollectionUtils.isEmpty(attribut.getArten())){
+              if (CollectionUtils.isEmpty(attribut.getArten())) {
                 final List<ZahlungsmittelArt> arten = new ArrayList<>();
                 arten.add(paymentType);
                 attribut.setArten(arten);
-              }else{
+              } else {
                 attribut.getArten().add(paymentType);
               }
 
             });
   }
 
-  public static ZahlungsmittelArt getPaymentMethodType(ZahlungsmittelArt.ZahlungsmittelArten type,
-                                                 List<ZahlungsmittelArt> types){
-    return types
-            .stream()
-            .filter(zahlungsmittelArt -> zahlungsmittelArt.getName().equals(type.getRepresentation()))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Didnt find an entity for the type"));
-  }
+  public class UserPaymentInformation {
+    public List<Zahlungsmittel> zahlungsmittels;
+    public List<ZahlungsmittelAttribut> zahlungsmittelAttributs;
 
-  public static ZahlungsmittelArtAttribut getPaymentMethodTypeAttribute(String name,
-                                                                  List<ZahlungsmittelArtAttribut> attributs) {
-    return attributs
-            .stream()
-            .filter(attribut -> attribut.getName().equals(name))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Didn't find an entity for the attribute"));
   }
 }
