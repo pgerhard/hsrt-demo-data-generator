@@ -1,4 +1,4 @@
-package de.university.reutlingen.datenbank_praktikum.demo_data_generator;
+package de.university.reutlingen.datenbank_praktikum.demo_data_generator.configuration;
 
 import com.github.javafaker.Faker;
 import org.springframework.context.annotation.Bean;

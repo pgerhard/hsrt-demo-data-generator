@@ -1,6 +1,5 @@
 package de.university.reutlingen.datenbank_praktikum.demo_data_generator.model;
 
-import de.university.reutlingen.datenbank_praktikum.demo_data_generator.ZahlungsmittelArt;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.AbstractPersistable;

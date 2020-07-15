@@ -1,9 +1,10 @@
-package de.university.reutlingen.datenbank_praktikum.demo_data_generator;
+package de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator;
 
 import com.github.javafaker.Faker;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Kaeufer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,8 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-@Component
-public class DemoDataService {
+@Service
+public class KaeuferGenerator {
 
   private static final BiFunction<String, String, String> TO_EMAIL = (firstname, lastname) -> String.format("%s.%s@example.com", firstname.toLowerCase(), lastname.toLowerCase());
   private static final BiFunction<String, String, String> TO_USERNAME = (firstname, lastname) -> firstname.toLowerCase().charAt(0) + lastname.toLowerCase();

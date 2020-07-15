@@ -1,7 +1,15 @@
 package de.university.reutlingen.datenbank_praktikum.demo_data_generator;
 
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator.AdressGenerator;
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator.AuctionGenerator;
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator.KaeuferGenerator;
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator.PaymentMethodGenerator;
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator.ProductGenerator;
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator.RatingGenerator;
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator.SellerGenerator;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Adresse;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Kaeufer;
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelArt;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelArtAttribut;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.repository.jpa.AdresseRepository;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.repository.jpa.AuktionRepository;
@@ -25,8 +33,6 @@ import de.university.reutlingen.datenbank_praktikum.demo_data_generator.reposito
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.repository.jpa.ZahlungsmittelAttributRepository;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.repository.jpa.ZahlungsmittelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,78 +43,98 @@ import javax.transaction.Transactional;
 @RestController
 public class DemoDataClient {
 
-  private final TransactionTemplate txTemplate;
   @Autowired
-  private DemoDataService demoDataService;
+  private KaeuferGenerator kaeuferGenerator;
+
   @Autowired
-  private DemoAddressService demoAddressService;
+  private AdressGenerator adressGenerator;
+
   @Autowired
   private PaymentMethodGenerator paymentMethodGenerator;
+
   @Autowired
   private SellerGenerator sellerGenerator;
-  @Autowired
-  private PlatformTransactionManager transactionManager;
+
   @Autowired
   private AuktionsbewertungRepository auktionsbewertungRepository;
+
   @Autowired
   private KaeuferbewertungRepository kaeuferbewertungRepository;
+
   @Autowired
   private VerkaeuferbewertungRepository verkaeuferbewertungRepository;
+
   @Autowired
   private KaeuferRepository kaeuferRepository;
+
   @Autowired
   private AdresseRepository adresseRepository;
+
   @Autowired
   private AuktionRepository auktionRepository;
+
   @Autowired
   private GebotRepository gebotRepository;
+
   @Autowired
   private RechnungRepository rechnungRepository;
+
   @Autowired
   private RechnungspositionRepository rechnungspositionRepository;
+
   @Autowired
   private ZahlungsmittelArtRepository zahlungsmittelArtRepository;
+
   @Autowired
   private ZahlungsmittelArtAttributRepository zahlungsmittelArtAttributRepository;
+
   @Autowired
   private ZahlungsmittelRepository zahlungsmittelRepository;
+
   @Autowired
   private ZahlungsmittelAttributRepository zahlungsmittelAttributRepository;
+
   @Autowired
   private SchlagwortRepository schlagwortRepository;
+
   @Autowired
   private ProduktkategorieRepository produktkategorieRepository;
+
   @Autowired
   private ProduktRepository produktRepository;
+
   @Autowired
   private ProduktmerkmalRepository produktmerkmalRepository;
+
   @Autowired
   private ProduktvorlagemerkmalRepository produktvorlagemerkmalRepository;
+
   @Autowired
   private ProduktvorlageRepository produktvorlageRepository;
+
   @Autowired
   private ExemplarRepository exemplarRepository;
+
   @Autowired
   private VerkaeuferRepository verkaeuferRepository;
+
   @Autowired
   private ProductGenerator productGenerator;
+
   @Autowired
   private AuctionGenerator auctionGenerator;
+
   @Autowired
   private RatingGenerator ratingGenerator;
 
-  public DemoDataClient() {
-    this.txTemplate = new TransactionTemplate(transactionManager);
-  }
-
   @PostMapping("/kaeufer")
   public List<Kaeufer> generateDemoData() {
-    return saveKaeufer(demoDataService.generateKaeufer());
+    return saveKaeufer(kaeuferGenerator.generateKaeufer());
   }
 
   @PostMapping("/adressen")
   public List<Adresse> generateAdresses() {
-    return saveAdressen(demoAddressService.generateAdressees(kaeuferRepository.findAll()));
+    return saveAdressen(adressGenerator.generateAdressees(kaeuferRepository.findAll()));
   }
 
   @PostMapping("/zahlungsmittelArten")

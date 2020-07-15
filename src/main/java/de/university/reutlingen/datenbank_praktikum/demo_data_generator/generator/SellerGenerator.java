@@ -1,15 +1,17 @@
-package de.university.reutlingen.datenbank_praktikum.demo_data_generator;
+package de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator;
 
-import static de.university.reutlingen.datenbank_praktikum.demo_data_generator.PaymentMethodGenerator.E_MAIL;
-import static de.university.reutlingen.datenbank_praktikum.demo_data_generator.PaymentMethodGenerator.getPaymentMethodTypeAttribute;
+import static de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator.PaymentMethodGenerator.E_MAIL;
+import static de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator.PaymentMethodGenerator.getPaymentMethodTypeAttribute;
 
 import com.github.javafaker.Faker;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Adresse;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Kaeufer;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Verkaeufer;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Zahlungsmittel;
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelArt;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelArtAttribut;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelAttribut;
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.util.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,6 @@ public class SellerGenerator {
                                        List<ZahlungsmittelArt> paymentMethodTypes,
                                        List<ZahlungsmittelArtAttribut> paymentMethodTypeAttribute) {
 
-//    DemoAddressService.getRandomNumberInRange()
     List<String> usedEmails = new ArrayList<>();
 
     List<Verkaeufer> sellers = new ArrayList<>();
@@ -37,7 +38,7 @@ public class SellerGenerator {
     for (int i = 0; i < 10; i++) {
       Kaeufer buyer;
       do {
-        final int buyerIndex = DemoAddressService.getRandomNumberInRange(0, buyers.size() - 1);
+        final int buyerIndex = Helper.getRandomNumberInRange(0, buyers.size() - 1);
         buyer = buyers.get(buyerIndex);
       } while (usedEmails.contains(buyer.getEmail()));
       usedEmails.add(buyer.getEmail());

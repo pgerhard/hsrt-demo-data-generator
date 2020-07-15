@@ -1,4 +1,4 @@
-package de.university.reutlingen.datenbank_praktikum.demo_data_generator;
+package de.university.reutlingen.datenbank_praktikum.demo_data_generator.model;
 
 import lombok.Getter;
 import lombok.Setter;

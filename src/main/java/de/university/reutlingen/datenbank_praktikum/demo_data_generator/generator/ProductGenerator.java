@@ -1,4 +1,4 @@
-package de.university.reutlingen.datenbank_praktikum.demo_data_generator;
+package de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator;
 
 import com.github.javafaker.Faker;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Exemplar;
@@ -8,6 +8,7 @@ import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Pr
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Produktvorlage;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Produktvorlagemerkmal;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Schlagwort;
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.util.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class ProductGenerator {
   public static <T> List<T> takeRandomItems(List<T> sourceList, int upperBound) {
     final HashSet<T> randomItems = new HashSet<>();
     do {
-      final int randomIndex = DemoAddressService.getRandomNumberInRange(0, sourceList.size() - 1);
+      final int randomIndex = Helper.getRandomNumberInRange(0, sourceList.size() - 1);
       randomItems.add(sourceList.get(randomIndex));
     } while (randomItems.size() < upperBound);
 
@@ -63,7 +64,7 @@ public class ProductGenerator {
     for (int i = 0; i < 100; i++) {
       final Produktvorlagemerkmal herstellerVorlagemerkmal = new Produktvorlagemerkmal();
       herstellerVorlagemerkmal.setName(faker.lorem().word());
-      if (DemoAddressService.getRandomNumberInRange(0, 10) > 3) {
+      if (Helper.getRandomNumberInRange(0, 10) > 3) {
         herstellerVorlagemerkmal.setBearbeitbar(Boolean.TRUE);
         herstellerVorlagemerkmal.setStartwert("");
       } else {
@@ -81,7 +82,7 @@ public class ProductGenerator {
       final Produktvorlage produktvorlage = new Produktvorlage();
       produktvorlage.setName(faker.lorem().word());
       produktvorlage.setProduktkategorie(produktkategorieList.get(
-              DemoAddressService.getRandomNumberInRange(0, produktkategorieList.size() - 1)
+              Helper.getRandomNumberInRange(0, produktkategorieList.size() - 1)
       ));
 
       final List<Produktvorlagemerkmal> produktvorlagemerkmale = takeRandomItems(produktvorlagemerkmalList, 5);
@@ -94,7 +95,7 @@ public class ProductGenerator {
     List<Produkt> produktList = new ArrayList<>();
     List<Produktmerkmal> produktmerkmalList = new ArrayList<>();
     for (int i = 0; i < 100; i++) {
-      final Produktvorlage produktvorlage = produktvorlageList.get(DemoAddressService.getRandomNumberInRange(0, produktvorlageList.size() - 1));
+      final Produktvorlage produktvorlage = produktvorlageList.get(Helper.getRandomNumberInRange(0, produktvorlageList.size() - 1));
 
       final Produkt produkt = new Produkt();
       produkt.setBezeichnung(faker.commerce().productName());
@@ -114,13 +115,14 @@ public class ProductGenerator {
         produktmerkmal.setProduktvorlagemerkmal(merkmal);
         produktmerkmalList.add(produktmerkmal);
       }
+      produkt.setProduktvorlage(produktvorlage);
 
       produktList.add(produkt);
     }
 
     List<Exemplar> exemplarList = new ArrayList<>();
     for (Produkt produkt : produktList) {
-      final int numberOfExemplare = DemoAddressService.getRandomNumberInRange(1, 10);
+      final int numberOfExemplare = Helper.getRandomNumberInRange(1, 10);
       for (int i = 0; i < numberOfExemplare; i++) {
         final Exemplar exemplar = new Exemplar();
         exemplar.setProdukt(produkt);

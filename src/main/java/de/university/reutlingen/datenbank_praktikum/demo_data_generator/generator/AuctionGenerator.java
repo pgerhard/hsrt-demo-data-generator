@@ -1,6 +1,6 @@
-package de.university.reutlingen.datenbank_praktikum.demo_data_generator;
+package de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator;
 
-import static de.university.reutlingen.datenbank_praktikum.demo_data_generator.DemoAddressService.getRandomNumberInRange;
+import static de.university.reutlingen.datenbank_praktikum.demo_data_generator.util.Helper.getRandomNumberInRange;
 import static de.university.reutlingen.datenbank_praktikum.demo_data_generator.DemoDataGeneratorApplication.REFERENCE_DATE;
 
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Adresse;

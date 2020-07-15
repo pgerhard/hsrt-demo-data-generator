@@ -1,13 +1,15 @@
-package de.university.reutlingen.datenbank_praktikum.demo_data_generator;
+package de.university.reutlingen.datenbank_praktikum.demo_data_generator.generator;
 
 import static de.university.reutlingen.datenbank_praktikum.demo_data_generator.DemoDataGeneratorApplication.REFERENCE_DATE;
 
 import com.github.javafaker.Faker;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Kaeufer;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Zahlungsmittel;
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelArt;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelArtAttribut;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelArten;
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.ZahlungsmittelAttribut;
+import de.university.reutlingen.datenbank_praktikum.demo_data_generator.util.Helper;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -139,9 +141,9 @@ public class PaymentMethodGenerator {
     final List<ZahlungsmittelAttribut> zahlungsmittelAttribute = new ArrayList<>();
 
     for (Kaeufer kaeufer : kaeuferList) {
-      final int numberOfPaymentMethods = DemoAddressService.getRandomNumberInRange(1, 5);
+      final int numberOfPaymentMethods = Helper.getRandomNumberInRange(1, 5);
       for (int i = 0; i < numberOfPaymentMethods; i++) {
-        final int numberOfPaymentMethodType = DemoAddressService.getRandomNumberInRange(0, 4);
+        final int numberOfPaymentMethodType = Helper.getRandomNumberInRange(0, 4);
         final ZahlungsmittelArt.ZahlungsmittelArten paymentMethodType = ZahlungsmittelArt.ZahlungsmittelArten.values()[numberOfPaymentMethodType];
 
         final Zahlungsmittel zahlungsmittel = new Zahlungsmittel();
