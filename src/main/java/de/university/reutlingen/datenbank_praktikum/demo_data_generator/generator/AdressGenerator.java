@@ -6,9 +6,11 @@ import de.university.reutlingen.datenbank_praktikum.demo_data_generator.model.Ka
 import de.university.reutlingen.datenbank_praktikum.demo_data_generator.util.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AdressGenerator {
@@ -22,6 +24,9 @@ public class AdressGenerator {
 
     for (Kaeufer buyer : buyers) {
       final int numberOfAdresses = Helper.getRandomNumberInRange(1, 3);
+
+      List<Adresse> kaeuferAdressList = new ArrayList<>();
+
       for (int i = 0; i < numberOfAdresses; i++) {
         final Adresse adresse = new Adresse();
 
@@ -52,8 +57,30 @@ public class AdressGenerator {
           adresse.setArt(Adresse.Art.LIEFERADRESSE);
         }
 
+        kaeuferAdressList.add(adresse);
         adresses.add(adresse);
       }
+
+      final List<Adresse> kaeuferLieferadressen = kaeuferAdressList
+              .stream()
+              .filter(adresse -> adresse.getArt().equals(Adresse.Art.LIEFERADRESSE))
+              .collect(Collectors.toList());
+
+      // Ensure that a buyer has a delivery adress
+      if (CollectionUtils.isEmpty(kaeuferLieferadressen)){
+        final Adresse adresse = new Adresse();
+
+        adresse.setStrasse(faker.address().streetName());
+        adresse.setHausnummer(Integer.valueOf(faker.address().streetAddressNumber()));
+        adresse.setPlz(faker.address().zipCode());
+        adresse.setStadt(faker.address().city());
+        adresse.setBundesland(faker.address().state());
+        adresse.setLand("Deutschland");
+        adresse.setKaeufer(buyer);
+        adresse.setArt(Adresse.Art.LIEFERADRESSE);
+        adresses.add(adresse);
+      }
+
     }
 
     return adresses;

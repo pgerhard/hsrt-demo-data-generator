@@ -147,6 +147,7 @@ public class AuctionGenerator {
         final Rechnung rechnung = new Rechnung();
         final Auktion auktion = rechnungspositionAuktionMap.get(position);
 
+        rechnung.setRechnungsDatum(DateUtils.addHours(auktion.getEndZeitPunkt(), 12));
         if (getRandomNumberInRange(1, 10) > 5) {
           rechnung.setZahlungsDatum(
                   DateUtils.addDays(
@@ -185,7 +186,7 @@ public class AuctionGenerator {
         final Adresse rechnungsAdresse;
         if (!CollectionUtils.isEmpty(rechnungsAdressListe) && getRandomNumberInRange(1, 10) > 7) {
           if (rechnungsAdressListe.size() > 1) {
-            rechnungsAdresse = rechnungsAdressListe.get(getRandomNumberInRange(0, lieferAdressListe.size() - 1));
+            rechnungsAdresse = rechnungsAdressListe.get(getRandomNumberInRange(0, rechnungsAdressListe.size() - 1));
           } else {
             rechnungsAdresse = rechnungsAdressListe.get(0);
           }

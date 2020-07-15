@@ -61,7 +61,7 @@ public class ProductGenerator {
     }
 
     final List<Produktvorlagemerkmal> produktvorlagemerkmalList = new ArrayList<>();
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 25; i++) {
       final Produktvorlagemerkmal herstellerVorlagemerkmal = new Produktvorlagemerkmal();
       herstellerVorlagemerkmal.setName(faker.lorem().word());
       if (Helper.getRandomNumberInRange(0, 10) > 3) {
@@ -78,7 +78,7 @@ public class ProductGenerator {
 
     Map<Produktvorlage, List<Produktvorlagemerkmal>> templatesAndAttributes = new HashMap<>();
     final List<Produktvorlage> produktvorlageList = new ArrayList<>();
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 25; i++) {
       final Produktvorlage produktvorlage = new Produktvorlage();
       produktvorlage.setName(faker.lorem().word());
       produktvorlage.setProduktkategorie(produktkategorieList.get(
@@ -94,7 +94,7 @@ public class ProductGenerator {
 
     List<Produkt> produktList = new ArrayList<>();
     List<Produktmerkmal> produktmerkmalList = new ArrayList<>();
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 50; i++) {
       final Produktvorlage produktvorlage = produktvorlageList.get(Helper.getRandomNumberInRange(0, produktvorlageList.size() - 1));
 
       final Produkt produkt = new Produkt();
@@ -122,7 +122,7 @@ public class ProductGenerator {
 
     List<Exemplar> exemplarList = new ArrayList<>();
     for (Produkt produkt : produktList) {
-      final int numberOfExemplare = Helper.getRandomNumberInRange(1, 10);
+      final int numberOfExemplare = Helper.getRandomNumberInRange(1, 5);
       for (int i = 0; i < numberOfExemplare; i++) {
         final Exemplar exemplar = new Exemplar();
         exemplar.setProdukt(produkt);
