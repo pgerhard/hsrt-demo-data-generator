@@ -128,39 +128,85 @@ public class DemoDataClient {
   private RatingGenerator ratingGenerator;
 
   @PostMapping("/kaeufer")
-  public List<Kaeufer> generateDemoData() {
-    return saveKaeufer(kaeuferGenerator.generateKaeufer());
+  public List<Kaeufer> generateDemoData(
+          @RequestParam(name = "dry-run", required = false, defaultValue = "TRUE") Boolean dryRun) {
+    final List<Kaeufer> kaeuferList = kaeuferGenerator.generateKaeufer();
+
+    if (!dryRun) {
+      return saveKaeufer(kaeuferList);
+    } else {
+      System.out.println("Dry run");
+      return kaeuferList;
+    }
   }
 
   @PostMapping("/adressen")
-  public List<Adresse> generateAdresses() {
-    return saveAdressen(adressGenerator.generateAdressees(kaeuferRepository.findAll()));
+  public List<Adresse> generateAdresses(
+          @RequestParam(name = "dry-run", required = false, defaultValue = "TRUE") Boolean dryRun) {
+    final List<Adresse> adresseList = adressGenerator.generateAdressees(kaeuferRepository.findAll());
+    if (!dryRun) {
+      return saveAdressen(adresseList);
+    } else {
+      System.out.println("Dry run");
+      return adresseList;
+    }
   }
 
   @PostMapping("/zahlungsmittelArten")
-  public List<ZahlungsmittelArt> generatePaymentTypes() {
-    return savePaymentTypes(paymentMethodGenerator.generatePaymentMethodTypes());
+  public List<ZahlungsmittelArt> generatePaymentTypes(
+          @RequestParam(name = "dry-run", required = false, defaultValue = "TRUE") Boolean dryRun) {
+    final List<ZahlungsmittelArt> paymentTypes = paymentMethodGenerator.generatePaymentMethodTypes();
+    if (!dryRun) {
+      return savePaymentTypes(paymentTypes);
+    } else {
+      System.out.println("Dry run");
+      return paymentTypes);
+    }
   }
 
   @PostMapping("/zahlungsmittelArtAttribut")
-  public List<ZahlungsmittelArtAttribut> generatePaymentTypeAttributes() {
-    return savePaymentTypeAttributes(paymentMethodGenerator.generatPaymentTypeAttributes(zahlungsmittelArtRepository.findAll()));
+  public List<ZahlungsmittelArtAttribut> generatePaymentTypeAttributes(
+          @RequestParam(name = "dry-run", required = false, defaultValue = "TRUE") Boolean dryRun) {
+    final List<ZahlungsmittelArtAttribut> artAttributList = paymentMethodGenerator.generatPaymentTypeAttributes(zahlungsmittelArtRepository.findAll());
+
+    if (!dryRun) {
+      return savePaymentTypeAttributes(artAttributList);
+    } else {
+      System.out.println("Dry run");
+      return artAttributList;
+    }
   }
 
   @PostMapping("/zahlungsmittel")
-  public PaymentMethodGenerator.UserPaymentInformation generatePaymentMethods() {
-    return store(paymentMethodGenerator.generatePaymentMethods(
+  public PaymentMethodGenerator.UserPaymentInformation generatePaymentMethods(
+          @RequestParam(name = "dry-run", required = false, defaultValue = "TRUE") Boolean dryRun) {
+    final PaymentMethodGenerator.UserPaymentInformation paymentMethods = paymentMethodGenerator.generatePaymentMethods(
             kaeuferRepository.findAll(),
             zahlungsmittelArtRepository.findAll(),
-            zahlungsmittelArtAttributRepository.findAll()));
+            zahlungsmittelArtAttributRepository.findAll());
+
+    if (!dryRun) {
+      return store(paymentMethods);
+    } else {
+      System.out.println("Dry run");
+      return paymentMethods;
+    }
   }
 
   @PostMapping("/verkaeufer")
-  public SellerGenerator.SellerData generateSellerData() {
-    return store(sellerGenerator.generateSellerData(
+  public SellerGenerator.SellerData generateSellerData(
+          @RequestParam(name = "dry-run", required = false, defaultValue = "TRUE") Boolean dryRun) {
+    final SellerGenerator.SellerData sellerData = sellerGenerator.generateSellerData(
             kaeuferRepository.findAll(),
             zahlungsmittelArtRepository.findAll(),
-            zahlungsmittelArtAttributRepository.findAll()));
+            zahlungsmittelArtAttributRepository.findAll());
+
+    if (!dryRun) {
+      return store(sellerData);
+    } else {
+      System.out.println("Dry run");
+      return sellerData;
+    }
   }
 
   @PostMapping("/produkte")
@@ -171,6 +217,7 @@ public class DemoDataClient {
     if (!dryRun) {
       return store(productData);
     } else {
+      System.out.println("Dry run");
       return productData;
     }
   }
@@ -188,6 +235,7 @@ public class DemoDataClient {
     if (!dryRun) {
       return store(auctionData);
     } else {
+      System.out.println("Dry run");
       return auctionData;
     }
   }
